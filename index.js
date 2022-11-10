@@ -46,6 +46,28 @@ async function run() {
       const service = await serviceCollection.findOne(query);
       res.send(service);
     });
+    app.post("/reviews", async (req, res) => {
+      const order = req.body;
+      const result = await reviewCollection.insertOne(order);
+      res.send(result);
+      console.log(result);
+    });
+    app.get("/reviews", async (req, res) => {
+      let query = {};
+      if (req.query.email) {
+        query = {
+          email: req.query.email,
+        };
+      }
+      if (req.query.service) {
+        query = {
+          service: req.query.service,
+        };
+      }
+      const cursor = reviewCollection.find(query);
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
   } finally {
   }
 }
