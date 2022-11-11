@@ -40,6 +40,14 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+    app.post("/services", async (req, res) => {
+      const order = req.body;
+      const result = await serviceCollection.insertOne(order);
+      res.send(result);
+      console.log(result);
+    });
+
     app.get("/services/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -67,6 +75,12 @@ async function run() {
       const cursor = reviewCollection.find(query);
       const orders = await cursor.toArray();
       res.send(orders);
+    });
+    app.delete("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await reviewCollection.deleteOne(query);
+      res.send(result);
     });
   } finally {
   }
